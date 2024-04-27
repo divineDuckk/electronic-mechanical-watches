@@ -1,0 +1,26 @@
+$clockWidth: 400px;
+$clockHeight: 400px;
+.clock {
+  width: $clockWidth;
+  height: $clockHeight;
+  border: 1px solid white;
+  position: relative;
+  justify-content: center;
+  display: flex;
+  border-radius: 50%;
+  p {
+    margin: 0;
+    display: block;
+    width: 30px;
+  }
+  .min {
+    position: absolute;
+    height: 300px;
+    top: 55px;
+  }
+  .hour {
+    position: absolute;
+    height: 160px;
+    top: 120px;
+  }
+}
