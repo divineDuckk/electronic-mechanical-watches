@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./clock.module.scss";
+import { calcSecOrMinAngle } from "../../utils/calcSecOrMinAngle";
+import { calcHourAngle } from "../../utils/calcHourAngle";
 const hourArr = 3,
   secArr = 8,
   minArr = 6;
@@ -8,9 +10,9 @@ const Clock = ({ tickPerSecond = 1 }) => {
   const [sec, setSec] = useState(new Date().getSeconds());
   const [min, setMin] = useState(new Date().getMinutes());
   const [hour, setHour] = useState(new Date().getHours() % 12);
-  const [rotationSecAngle, setSecAngle] = useState((sec / 60) * 360);
-  const [rotationMinAngle, setMinAngle] = useState((min / 60) * 360);
-  const [rotationHourAngle, setHourAngle] = useState((hour / 12) * 360);
+  const [rotationSecAngle, setSecAngle] = useState(calcSecOrMinAngle(sec));
+  const [rotationMinAngle, setMinAngle] = useState(calcSecOrMinAngle(min));
+  const [rotationHourAngle, setHourAngle] = useState(calcHourAngle(hour));
   useEffect(() => {
     const interval = setInterval(() => {
       setSec((prev) => prev + 1);
@@ -41,9 +43,9 @@ const Clock = ({ tickPerSecond = 1 }) => {
     },
   ];
   useEffect(() => {
-    setSecAngle((sec / 60) * 360);
-    setMinAngle((min / 60) * 360);
-    setHourAngle((hour / 12) * 360);
+    setSecAngle(calcSecOrMinAngle(sec));
+    setMinAngle(calcSecOrMinAngle(min));
+    setHourAngle(calcHourAngle(hour));
     if (sec === 60) {
       setMin((prevMin) => prevMin + 1);
       setSec(0);
