@@ -5,10 +5,11 @@ pipeline {
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Branch to build')
     }
 
-    environment {
-        NODEJS_HOME = tool name: 'NodeJS 13', type: 'NodeJS'
-        PATH = "${NODEJS_HOME}/bin:${env.PATH}"
-    }
+  environment {
+    NODEJS_HOME = tool name: 'NodeJS 18.15.0', type: 'NodeJS'
+    PATH = "${NODEJS_HOME}/bin:${env.PATH}"
+}
+
 
     stages {
         stage('Checkout') {
