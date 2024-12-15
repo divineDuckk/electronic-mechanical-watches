@@ -87,11 +87,7 @@ pipeline {
     }
 
     post {
-        always {
-            node('any') {  // You can specify your node label here, such as 'linux' or 'windows'
-                cleanWs()
-            }
-        }
+       
 
         success {
             echo "Pipeline successfully completed"
