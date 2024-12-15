@@ -8,8 +8,6 @@ pipeline {
     environment {
         NODEJS_HOME = tool name: 'NodeJS 18', type: 'NodeJS'
         PATH = "${NODEJS_HOME}/bin:${env.PATH}"
-        VERSEL_API_TOKEN = credentials('YVvIclyGAbSpuOG56vAQ9P4C')
-        VERSEL_PROJECT_ID = 'prj_V6dX8VrWHndqrvRlobQONFlCcRgt'
     }
 
     stages {
@@ -39,37 +37,6 @@ pipeline {
             steps {
                 script {
                     bat 'npm run build'
-                }
-            }
-        }
-
-        stage('Deploy to Vercel') {
-            when {
-                anyOf {
-                    branch 'main'
-                    branch 'dev'
-                    branch 'qa'
-                }
-            }
-            steps {
-                script {
-                    def targetEnv
-                    if (params.BRANCH_NAME == 'main') {
-                        targetEnv = 'production'
-                    } else if (params.BRANCH_NAME == 'dev') {
-                        targetEnv = 'staging'
-                    } else if (params.BRANCH_NAME == 'qa') {
-                        targetEnv = 'qa'
-                    }
-
-                    echo "Deploying to ${targetEnv} on Vercel"
-                    bat """
-                        curl -X POST https://api.vercel.com/v12/now/deployments ^
-                        -H "Authorization: Bearer ${VERSEL_API_TOKEN}" ^
-                        -F "files=@./build" ^
-                        -F "name=${VERSEL_PROJECT_ID}" ^
-                        -F "target=${targetEnv}"
-                    """
                 }
             }
         }
