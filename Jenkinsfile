@@ -1,10 +1,9 @@
 pipeline {
     agent any
 
-     parameters {
+    parameters {
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Branch to build')
     }
-
 
     environment {
         NODEJS_HOME = tool name: 'NodeJS 18', type: 'NodeJS'
@@ -58,41 +57,40 @@ pipeline {
                         echo "Deploying to Production on Vercel"
                         bat """
                             curl -X POST https://api.vercel.com/v12/now/deployments ^
-                            -H "Authorization: Bearer ${VERSEL_API_TOKEN}" ^
-                            -F "files=@./build" ^
-                            -F "name=${VERSEL_PROJECT_ID}" ^
+                            -H "Authorization: Bearer ${VERSEL_API_TOKEN}" ^ 
+                            -F "files=@./build" ^ 
+                            -F "name=${VERSEL_PROJECT_ID}" ^ 
                             -F "target=production"
                         """
                     } else if (env.params.BRANCH_NAME == 'dev') {
                         echo "Deploying to Staging on Vercel"
                         bat """
-                            curl -X POST https://api.vercel.com/v12/now/deployments ^
-                            -H "Authorization: Bearer ${VERSEL_API_TOKEN}" ^
-                            -F "files=@./build" ^
-                            -F "name=${VERSEL_PROJECT_ID}" ^
+                            curl -X POST https://api.vercel.com/v12/now/deployments ^ 
+                            -H "Authorization: Bearer ${VERSEL_API_TOKEN}" ^ 
+                            -F "files=@./build" ^ 
+                            -F "name=${VERSEL_PROJECT_ID}" ^ 
                             -F "target=staging"
                         """
-                    }
-                    else if (env.params.BRANCH_NAME == 'qa') {
+                    } else if (env.params.BRANCH_NAME == 'qa') {
                         echo "Deploying to Staging on Vercel"
                         bat """
-                            curl -X POST https://api.vercel.com/v12/now/deployments ^
-                            -H "Authorization: Bearer ${VERSEL_API_TOKEN}" ^
-                            -F "files=@./build" ^
-                            -F "name=${VERSEL_PROJECT_ID}" ^
+                            curl -X POST https://api.vercel.com/v12/now/deployments ^ 
+                            -H "Authorization: Bearer ${VERSEL_API_TOKEN}" ^ 
+                            -F "files=@./build" ^ 
+                            -F "name=${VERSEL_PROJECT_ID}" ^ 
                             -F "target=qa"
                         """
                     }
                 }
             }
         }
-
-       
     }
 
     post {
         always {
-            cleanWs()
+            node {
+                cleanWs()
+            }
         }
 
         success {
