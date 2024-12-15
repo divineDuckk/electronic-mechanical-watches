@@ -53,42 +53,29 @@ pipeline {
             }
             steps {
                 script {
-                    if (env.params.BRANCH_NAME == 'main') {
-                        echo "Deploying to Production on Vercel"
-                        bat """
-                            curl -X POST https://api.vercel.com/v12/now/deployments ^
-                            -H "Authorization: Bearer ${VERSEL_API_TOKEN}" ^ 
-                            -F "files=@./build" ^ 
-                            -F "name=${VERSEL_PROJECT_ID}" ^ 
-                            -F "target=production"
-                        """
-                    } else if (env.params.BRANCH_NAME == 'dev') {
-                        echo "Deploying to Staging on Vercel"
-                        bat """
-                            curl -X POST https://api.vercel.com/v12/now/deployments ^ 
-                            -H "Authorization: Bearer ${VERSEL_API_TOKEN}" ^ 
-                            -F "files=@./build" ^ 
-                            -F "name=${VERSEL_PROJECT_ID}" ^ 
-                            -F "target=staging"
-                        """
-                    } else if (env.params.BRANCH_NAME == 'qa') {
-                        echo "Deploying to Staging on Vercel"
-                        bat """
-                            curl -X POST https://api.vercel.com/v12/now/deployments ^ 
-                            -H "Authorization: Bearer ${VERSEL_API_TOKEN}" ^ 
-                            -F "files=@./build" ^ 
-                            -F "name=${VERSEL_PROJECT_ID}" ^ 
-                            -F "target=qa"
-                        """
+                    def targetEnv
+                    if (params.BRANCH_NAME == 'main') {
+                        targetEnv = 'production'
+                    } else if (params.BRANCH_NAME == 'dev') {
+                        targetEnv = 'staging'
+                    } else if (params.BRANCH_NAME == 'qa') {
+                        targetEnv = 'qa'
                     }
+
+                    echo "Deploying to ${targetEnv} on Vercel"
+                    bat """
+                        curl -X POST https://api.vercel.com/v12/now/deployments ^
+                        -H "Authorization: Bearer ${VERSEL_API_TOKEN}" ^
+                        -F "files=@./build" ^
+                        -F "name=${VERSEL_PROJECT_ID}" ^
+                        -F "target=${targetEnv}"
+                    """
                 }
             }
         }
     }
 
     post {
-       
-
         success {
             echo "Pipeline successfully completed"
         }
