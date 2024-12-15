@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+     parameters {
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Branch to build')
+    }
+
+
     environment {
         NODEJS_HOME = tool name: 'NodeJS 18', type: 'NodeJS'
         PATH = "${NODEJS_HOME}/bin:${env.PATH}"
@@ -11,7 +16,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: "${BRANCH_NAME}", url: 'https://github.com/divineDuckk/electronic-mechanical-watches.git'
+                git branch: "${params.BRANCH_NAME}", url: 'https://github.com/divineDuckk/electronic-mechanical-watches.git'
             }
         }
 
@@ -49,7 +54,7 @@ pipeline {
             }
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'main') {
+                    if (env.params.BRANCH_NAME == 'main') {
                         echo "Deploying to Production on Vercel"
                         bat """
                             curl -X POST https://api.vercel.com/v12/now/deployments ^
@@ -58,7 +63,7 @@ pipeline {
                             -F "name=${VERSEL_PROJECT_ID}" ^
                             -F "target=production"
                         """
-                    } else if (env.BRANCH_NAME == 'dev') {
+                    } else if (env.params.BRANCH_NAME == 'dev') {
                         echo "Deploying to Staging on Vercel"
                         bat """
                             curl -X POST https://api.vercel.com/v12/now/deployments ^
@@ -68,7 +73,7 @@ pipeline {
                             -F "target=staging"
                         """
                     }
-                    else if (env.BRANCH_NAME == 'qa') {
+                    else if (env.params.BRANCH_NAME == 'qa') {
                         echo "Deploying to Staging on Vercel"
                         bat """
                             curl -X POST https://api.vercel.com/v12/now/deployments ^
