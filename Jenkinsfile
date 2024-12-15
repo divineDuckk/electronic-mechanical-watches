@@ -5,11 +5,7 @@ pipeline {
         string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Branch to build')
     }
 
-  environment {
-    NODEJS_HOME = tool name: 'NodeJS 18.15.0', type: 'NodeJS'
-    PATH = "${NODEJS_HOME}/bin:${env.PATH}"
-}
-
+    tools{nodejs 'NodeJS 18.15.0'}
 
     stages {
         stage('Checkout') {
