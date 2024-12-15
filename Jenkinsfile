@@ -88,7 +88,7 @@ pipeline {
 
     post {
         always {
-            node {
+            node('any') {  // You can specify your node label here, such as 'linux' or 'windows'
                 cleanWs()
             }
         }
