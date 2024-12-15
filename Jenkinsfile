@@ -6,7 +6,7 @@ pipeline {
     }
 
     environment {
-        NODEJS_HOME = tool name: 'NodeJS 18', type: 'NodeJS'
+        NODEJS_HOME = tool name: 'NodeJS 13', type: 'NodeJS'
         PATH = "${NODEJS_HOME}/bin:${env.PATH}"
     }
 
